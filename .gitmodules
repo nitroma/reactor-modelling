@@ -1,0 +1,3 @@
+[submodule "functions/brewermap"]
+	path = functions/brewermap
+	url = git@github.com:DrosteEffect/BrewerMap.git
