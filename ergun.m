@@ -15,15 +15,25 @@ DeltaP = @(n_c, d_c) L(n_c, d_c) .*( 150*mu*(1-eps)^2.*u_0(n_c,d_c)./(eps^3*d_p^
 
 [n_c,d_c] = meshgrid(linspace(1,100,200),logspace(-2,0,200));
 
-contour(n_c,d_c,DeltaP(n_c, d_c)/1e5,logspace(-1,6,8),'ShowText',1)
+[~, c(1)] = contour(n_c,d_c,DeltaP(n_c, d_c)/1e5,logspace(-1,6,8),'ShowText',1);
+c(1).DisplayName = '\DeltaP / bar';
 
 ax = gca;
 ax.XAxis.Label.String = 'n_c';
 ax.YAxis.Label.String = 'd_c / m';
 ax.YAxis.Scale = 'log';
-ax.Title.String = '\DeltaP / bar';
 ax.ColorScale = 'log';
 % ax.Colormap = brewermap(8,'Reds');
 ax.Colormap = colormap('cool');
+legend;
+
+% plot aspect ratio
+hold on
+% [~, c(2)] = contour(n_c,d_c,L(n_c,d_c)./d_c,[1 10 100],'k--','ShowText',1);
+[M2, c(2)] = contour(n_c,d_c,L(n_c,d_c)./d_c,[1 10 100],'--');
+c(2).DisplayName = 'L/D';
+c(2).LineColor = [0.65 0.65 0.65];
+clabel(M2,c(2),'Color',c(2).LineColor)
+
 
 figExport(12,12,'ergun-contours-n-d')
