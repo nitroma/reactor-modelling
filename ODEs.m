@@ -23,14 +23,15 @@ a0(end) = 330;
 % plot output
 fig = figure;
 yyaxis left
-plot(z,a(:,1:I));
+p1 = plot(z,a(:,1:I));
+for l = 1:length(p1)
+    p1(l).DisplayName = species(l);
+end
 yyaxis right
-plot(z,a(:,end));
+p2 = plot(z,a(:,end),'DisplayName',"T");
+legend
 
 function dadz = nitrationODEs(z,a)
-    
-%     disp(a)
-%     disp(z)
 
 % grab inputs
 C   = a(1:I);       % [mol/m3] 
@@ -58,7 +59,7 @@ nu = [...
     -1 -1 -1;  % NA
      1  0  0;  % ONTOL
      0  1  0;  % MNTOL
-     0  0  1;  % PNTOLv
+     0  0  1;  % PNTOL
      1  1  1]; % W
 rI = nu * rJ;  % [mol/(m3.s)]
 
