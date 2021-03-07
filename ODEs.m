@@ -69,8 +69,8 @@ DH = dot(rJ,dh); % [J/(m3.s)]
 
 % compute derivatives
 dCdz    = C_; % [mol/m4]
-dC_dz   = 1/D_ez * ( u_s * C_ - rI ); % [mol/m4]
-dTdz = DH/(u_s*rho_f*c_p) * (1-lambda/kappa); % [K/m]
+dC_dz   = 1/D_ez * ( u_s * C_ + rI ); % [mol/m5]
+dTdz = -DH/(u_s*rho_f*c_p) * (1-lambda/kappa); % [K/m]
 
 % return derivatives in single column vector for 
 dadz = zeros(size(a));
