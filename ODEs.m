@@ -11,14 +11,13 @@ J = length(reactions);
 
 % set up initial condition
 a0 = zeros(2*I+1,1);
-a0(1:2) = 0.2;
-a0(6)   = 0.5;
+a0(1:6) = [4220 8440 0 0 0 9790];
 a0(end) = 330;
 
 % nitrationODEs(1,a0)
 
 % solve ODEs
-[z,a] = ode15s(@(z,a) nitrationODEs(z,a),linspace(1,10,101),a0);
+[z,a] = ode45(@(z,a) nitrationODEs(z,a),linspace(0,2,101),a0);
 
 % plot output
 fig = figure;
@@ -36,12 +35,12 @@ function dadz = nitrationODEs(z,a)
 % grab inputs
 C   = a(1:I);       % [mol/m3] 
 C_  = a(I+1:2*I);   % [mol/m4]
-T   = a(2*I+1)';    % [K]
+T   = a(end);       % [K]
  
 % constants
-u_s     = 1;
-rho_f   = 1;
-c_p     = 1;
+u_s     = 0.000220555; % [m/s]
+rho_f   = 1097.86; % [kg/m3]
+c_p     = 4.18; % [J/(mol.K)]
 lambda  = 1;
 kappa   = 3; % [W/(m.K)]
 D_ez    = 1;
