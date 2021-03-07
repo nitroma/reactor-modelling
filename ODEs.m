@@ -41,6 +41,7 @@ lambda  = 1;
 kappa   = 3; % [W/(m.K)]
 D_ez    = 1;
 R       = 8.314; % [J/(mol.K)]
+S       = 68600 % [W/m3]
 
 % rate per reaction
 A  = [1.739; 4.968; 7.024]; % [1/s]
@@ -65,7 +66,7 @@ DH = dot(rJ,dh); % [J/(m3.s)]
 % compute derivatives
 dCdz    = C_; % [mol/m4]
 dC_dz   = 1/D_ez * ( u_s * C_ + rI ); % [mol/m5]
-dTdz = -DH/(u_s*rho_f*c_p) * (1-lambda/kappa); % [K/m]
+dTdz = 1/(u_s*rho_f*c_p) * (-DH - lambda*S/kappa); % [K/m]
 
 % return derivatives in single column vector for 
 dadz = zeros(size(a));
