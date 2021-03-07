@@ -1,16 +1,12 @@
 %% reactor modelling ODEs
-function ODEs()
 
 % index i: species
 species = ["TOL" "NA" "ONTOL" "MNTOL" "PNTOL" "W"];
-I = length(species);
-
 % index j: reactions
 reactions = ["O" "M" "P"];
-J = length(reactions);
 
 % set up initial condition
-a0 = zeros(2*I+1,1);
+a0 = zeros(13,1);
 a0(1:6) = [4220 8440 0 0 0 9790];
 a0(end) = 330;
 
@@ -22,7 +18,7 @@ a0(end) = 330;
 % plot output
 fig = figure;
 yyaxis left
-p1 = plot(z,a(:,1:I));
+p1 = plot(z,a(:,1:6));
 for l = 1:length(p1)
     p1(l).DisplayName = species(l);
 end
@@ -33,14 +29,14 @@ legend
 function dadz = nitrationODEs(z,a)
 
 % grab inputs
-C   = a(1:I);       % [mol/m3] 
-C_  = a(I+1:2*I);   % [mol/m4]
-T   = a(end);       % [K]
+C   = a(1:6);   % [mol/m3] 
+C_  = a(7:12);  % [mol/m4]
+T   = a(13);    % [K]
  
 % constants
 u_s     = 0.000220555; % [m/s]
 rho_f   = 1097.86; % [kg/m3]
-c_p     = 4.18; % [J/(mol.K)]
+c_p     = 2932.12; % [J/(kg.K)]
 lambda  = 1;
 kappa   = 3; % [W/(m.K)]
 D_ez    = 1;
@@ -73,10 +69,8 @@ dTdz = -DH/(u_s*rho_f*c_p) * (1-lambda/kappa); % [K/m]
 
 % return derivatives in single column vector for 
 dadz = zeros(size(a));
-dadz(1:I)       = dCdz;     % [mol/m4] 
-dadz(I+1:2*I)   = dC_dz;    % [mol/m5]
-dadz(2*I+1)     = dTdz;     % [K/m]
-
-end
+dadz(1:6)   = dCdz;     % [mol/m4] 
+dadz(7:12)  = dC_dz;    % [mol/m5]
+dadz(13)    = dTdz;     % [K/m]
 
 end
