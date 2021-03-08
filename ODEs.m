@@ -36,12 +36,15 @@ T   = a(13);    % [K]
 % constants
 u_s     = 0.000220555; % [m/s]
 rho_f   = 1097.86; % [kg/m3]
-c_p     = 2932.12; % [J/(kg.K)]
+c_p_kg  = 2932.12; % [J/(kg.K)]
+c_p_mol = 4.18; % [J/(mol.K)]
 lambda  = 1;
-kappa   = 3; % [W/(m.K)]
+kappa_s = 3; % [W/(m.K)]
+kappa_f = 0.186761079513781; % [W/(m.K)]
 D_ez    = 1;
 R       = 8.314; % [J/(mol.K)]
-S       = 68600 % [W/m3]
+S       = 68600; % [W/m3]
+eta     = 0.99; % [-]
 
 % rate per reaction
 A  = [1.739; 4.968; 7.024]; % [1/s]
@@ -66,7 +69,9 @@ DH = dot(rJ,dh); % [J/(m3.s)]
 % compute derivatives
 dCdz    = C_; % [mol/m4]
 dC_dz   = 1/D_ez * ( u_s * C_ + rI ); % [mol/m5]
-dTdz = 1/(u_s*rho_f*c_p) * (-DH - lambda*S/kappa); % [K/m]
+% dTdz = -DH/(u_s*rho_f*c_p_kg) * (1-lambda/kappa_f); % [K/m]
+% dTdz = 1/(u_s*rho_f*c_p_kg) * (-DH - lambda*S/kappa_s); % [K/m]
+dTdz = (kappa_f/kappa_s + 1 - eta) * DH / (u_s * sum(C) * c_p_mol);
 
 % return derivatives in single column vector for 
 dadz = zeros(size(a));
