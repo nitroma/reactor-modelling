@@ -45,5 +45,6 @@ t = readtable('table4.txt',opts);
 
 % return numeric output
 F = str2double(t{1,:});
+disp(F)
 
 end
