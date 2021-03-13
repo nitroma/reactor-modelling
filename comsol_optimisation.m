@@ -32,9 +32,9 @@ status = system(command);
 % grab output from COMSOL
 % opts = detectImportOptions('table4.txt'); % auto-detect fails
 opts = delimitedTextImportOptions('NumVariables',2);
-opts.VariableNamesLine = 5;
 opts.DataLines = [6 Inf];
-opts.Delimiter = {'        ' '%'};
+opts.Delimiter = {' ' '%'};
+opts.ConsecutiveDelimitersRule = 'join';
 opts.LeadingDelimitersRule = 'ignore';
 t = readtable('table4.txt',opts);
 
