@@ -49,8 +49,8 @@ opts.ConsecutiveDelimitersRule = 'join';
 opts.LeadingDelimitersRule = 'ignore';
 t = readtable('table4.txt',opts);
 
-% return numeric output
-F = str2double(t{1,:});
+% return 2 objectives
+F = str2double(t{1,1:2});
 fprintf('do_comsol\t[inputs]\t');fprintf('%1.3e\t',x);
 fprintf('[outputs]\t');fprintf('%1.3e\t',F);fprintf('\n');
 
