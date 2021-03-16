@@ -2,24 +2,24 @@
 clear, clc, diary on
 
 % initial parameter values
-pname = ["d_i" "m_c_in" "Tc_in" "Tc"];
-punit = ["[m]" "[kg/s]" "[K]"   "[K]"];
-x0    = [0.02  0.15     325     325];
-lb    = [5e-3  0.05     289     289];
-ub    = [5e-2  0.50     350     350];
+pname = ["d_i" "m_c_in" "Tc"];
+punit = ["[m]" "[kg/s]" "[K]"];
+x0    = [0.02  0.15     325];
+lb    = [5e-3  0.05     289];
+ub    = [5e-2  0.50     350];
 
 % create function wrapper
 wrapped_comsol = @(x) do_comsol(x,pname,punit);
 
 % don't bother with the inequality or equality constrains
-A = zeros(1,4); b = 0;
+A = zeros(1,3); b = 0;
 Aeq = A; beq = b;
 
 % set options
 options = optimoptions(@gamultiobj,'MaxGenerations',72,'MaxStallGenerations',3,'MaxTime',6*60^2);
 
 % do optimisation
-[x,fval,exitflag,output,population,scores] = gamultiobj(wrapped_comsol,4,A,b,Aeq,beq,lb,ub,options);
+[x,fval,exitflag,output,population,scores] = gamultiobj(wrapped_comsol,length(x0),A,b,Aeq,beq,lb,ub,options);
 writematrix(x,'comsol_optimised_x.txt');
 writematrix(fval,'comsol_optimised_fval.txt');
 writematrix(population,'comsol_optimised_population.txt');
