@@ -51,7 +51,7 @@ t = readtable('table4.txt',opts);
 
 % return numeric output
 F = str2double(t{1,:});
-fprintf('do_comsol input: \t');fprintf('%1.3e\t',x);fprintf('\n');
-fprintf('do_comsol output:\t');fprintf('%1.3e\t',F);fprintf('\n');
+fprintf('do_comsol\t[inputs]\t');fprintf('%1.3e\t',x);
+fprintf('[outputs]\t');fprintf('%1.3e\t',F);fprintf('\n');
 
 end
