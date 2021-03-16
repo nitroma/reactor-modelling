@@ -16,7 +16,7 @@ A = zeros(1,4); b = 0;
 Aeq = A; beq = b;
 
 % set options
-options = optimoptions(@gamultiobj,'MaxGenerations',80);
+options = optimoptions(@gamultiobj,'MaxGenerations',72,'MaxStallGenerations',3,'MaxTime',6*60^2);
 
 % do optimisation
 [x,fval,exitflag,output,population,scores] = gamultiobj(wrapped_comsol,4,A,b,Aeq,beq,lb,ub,options);
