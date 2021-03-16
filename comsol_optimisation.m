@@ -2,8 +2,8 @@
 clear, clc, diary on
 
 % initial parameter values
-pname = ["d_i" "m_c_in" "Tc"];
-punit = ["[m]" "[kg/s]" "[K]"];
+pname = ["d_i" "m_c_in" "Tc"  "L"];
+punit = ["[m]" "[kg/s]" "[K]" "[m]"];
 x0    = [0.02  0.15     325];
 lb    = [5e-3  0.05     289];
 ub    = [5e-2  0.50     350];
@@ -16,7 +16,7 @@ A = zeros(1,3); b = 0;
 Aeq = A; beq = b;
 
 % set options
-options = optimoptions(@gamultiobj,'MaxGenerations',72,'MaxStallGenerations',3,'MaxTime',6*60^2);
+options = optimoptions(@gamultiobj,'MaxGenerations',36,'MaxStallGenerations',3,'MaxTime',6*60^2);
 
 % do optimisation
 [x,fval,exitflag,output,population,scores] = gamultiobj(wrapped_comsol,length(x0),A,b,Aeq,beq,lb,ub,options);
@@ -32,6 +32,9 @@ function F = do_comsol(x,pname,punit)
 
 % read input
 pvals = string(num2str(x(:),'%1.3e'))';
+
+% add additional parameter overrides
+pvals = [pvals "10"];
 
 % generate command
 command = strcat("comsolbatch -inputfile in.mph -pname ",join(pname,',')," -plist ",join(strcat('"',join([pvals;punit],'',1),'"'),',')," -methodcall my_method -nosave");
