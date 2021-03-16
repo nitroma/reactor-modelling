@@ -4,9 +4,9 @@ clear, clc, diary on
 % initial parameter values
 pname = ["d_i" "m_c_in" "Tc_in" "Tc"];
 punit = ["[m]" "[kg/s]" "[K]"   "[K]"];
-x0    = [0.02  0.15     325     330];
-lb    = [5e-3  0.05     273     273];
-ub    = [5e-2  0.50     373     373];
+x0    = [0.02  0.15     325     325];
+lb    = [5e-3  0.05     289     289];
+ub    = [5e-2  0.50     350     350];
 
 % create function wrapper
 wrapped_comsol = @(x) do_comsol(x,pname,punit);
@@ -15,9 +15,15 @@ wrapped_comsol = @(x) do_comsol(x,pname,punit);
 A = zeros(1,4); b = 0;
 Aeq = A; beq = b;
 
+% set options
+options = optimoptions(@gamultiobj,'MaxGenerations',80);
+
 % do optimisation
-x = gamultiobj(wrapped_comsol,4,A,b,Aeq,beq,lb,ub);
-writematrix(x,'comsol_optimised_values.txt');
+[x,fval,exitflag,output,population,scores] = gamultiobj(wrapped_comsol,4,A,b,Aeq,beq,lb,ub,options);
+writematrix(x,'comsol_optimised_x.txt');
+writematrix(fval,'comsol_optimised_fval.txt');
+writematrix(population,'comsol_optimised_population.txt');
+writematrix(scores,'comsol_optimised_scores.txt');
 
 diary off
 
@@ -45,6 +51,6 @@ t = readtable('table4.txt',opts);
 
 % return numeric output
 F = str2double(t{1,:});
-disp(F)
+fprintf('do_comsol output:\t');fprintf('%1.3e\t',F);fprintf('\n');
 
 end
