@@ -51,7 +51,7 @@ plot([363 363],ax.YLim,'--','DisplayName',"Safety limit");
 plot(360.62,3.5729,'o','DisplayName',"Operating point");
 legend;
 
-figExport(10,10,'comsol-pareto');
+figExport(8,8,'comsol-pareto');
 
 %% function
 
