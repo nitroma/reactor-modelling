@@ -8,6 +8,8 @@ x0    = [0.02  0.15     325];
 lb    = [5e-3  0.05     289];
 ub    = [5e-2  0.50     350];
 
+%% optimisation
+
 % create function wrapper
 wrapped_comsol = @(x) do_comsol(x,pname,punit);
 
@@ -16,7 +18,7 @@ A = zeros(1,3); b = 0;
 Aeq = A; beq = b;
 
 % set options
-options = optimoptions(@gamultiobj,'MaxGenerations',36,'MaxStallGenerations',3,'MaxTime',6*60^2);
+options = optimoptions(@gamultiobj,'MaxGenerations',36,'MaxStallGenerations',3,'MaxTime',6*60^2,'PlotFcn',@gaplotpareto);
 
 % do optimisation
 [x,fval,exitflag,output,population,scores] = gamultiobj(wrapped_comsol,length(x0),A,b,Aeq,beq,lb,ub,options);
@@ -26,6 +28,32 @@ writematrix(population,'comsol_optimised_population.txt');
 writematrix(scores,'comsol_optimised_scores.txt');
 
 diary off
+
+%% plotting
+
+% import data if running asynchronously
+x           = readmatrix('comsol_optimised_x.txt');
+fval        = readmatrix('comsol_optimised_fval.txt');
+population  = readmatrix('comsol_optimised_population.txt');
+scores      = readmatrix('comsol_optimised_scores.txt');
+
+close all
+addpath(genpath(pwd))
+
+plot(fval(:,1),fval(:,2),'o','DisplayName',"Pareto frontier");
+
+ax = gca;
+ax.XAxis.Label.String = "Maximum temperature (K)";
+ax.YAxis.Label.String = "Length required for 98% conversion (m)";
+
+hold on
+plot([363 363],ax.YLim,'--','DisplayName',"Safety limit");
+plot(360.62,3.5729,'o','DisplayName',"Operating point");
+legend;
+
+figExport(10,10,'comsol-pareto');
+
+%% function
 
 function F = do_comsol(x,pname,punit)
 % key reference: https://uk.comsol.com/blogs/how-to-run-comsol-multiphysics-from-the-command-line/
