@@ -18,7 +18,7 @@ A = zeros(1,3); b = 0;
 Aeq = A; beq = b;
 
 % set options
-options = optimoptions(@gamultiobj,'MaxGenerations',36,'MaxStallGenerations',3,'MaxTime',6*60^2,'PlotFcn',@gaplotpareto);
+options = optimoptions(@gamultiobj,'MaxGenerations',100,'MaxStallGenerations',3,'MaxTime',24*60^2,'PlotFcn',@gaplotpareto);
 
 % do optimisation
 [x,fval,exitflag,output,population,scores] = gamultiobj(wrapped_comsol,length(x0),A,b,Aeq,beq,lb,ub,options);
@@ -32,10 +32,10 @@ diary off
 %% plotting
 
 % import data if running asynchronously
-x           = readmatrix('comsol_optimised_x.txt');
-fval        = readmatrix('comsol_optimised_fval.txt');
-population  = readmatrix('comsol_optimised_population.txt');
-scores      = readmatrix('comsol_optimised_scores.txt');
+x = readmatrix('comsol_optimised_x.txt');
+fval = readmatrix('comsol_optimised_fval.txt');
+population = readmatrix('comsol_optimised_population.txt');
+scores = readmatrix('comsol_optimised_scores.txt');
 
 close all
 addpath(genpath(pwd))
@@ -51,7 +51,7 @@ plot([363 363],ax.YLim,'--','DisplayName',"Safety limit");
 plot(360.62,3.5729,'o','DisplayName',"Operating point");
 legend;
 
-figExport(8,8,'comsol-pareto');
+figExport(10,10,'comsol-pareto');
 
 %% function
 
